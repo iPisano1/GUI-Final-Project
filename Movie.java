@@ -1,29 +1,23 @@
-public class Movie{
-   
-   private int movieId;
+public class Movie {
    private String title;
    private int price;
-   
-   public Movie(int movieId, String title, int price)
-   {
-      this.movieId = movieId;
-      this.title = title;
-      this.price = price;
+   private String imagePath;
+
+   public Movie(String title, int price, String imagePath) {
+       this.title = title;
+       this.price = price;
+       this.imagePath = imagePath;
    }
-   
-   public int getMovieId()
-   {
-      return movieId;
+
+   public String getTitle() {
+       return title;
    }
-   
-   public String getTitle()
-   {
-      return title;
+
+   public int getPrice() {
+       return price;
    }
-   
-   public int getPrice()
-   {
-      return price;
+
+   public String getImagePath() {
+       return imagePath;
    }
-   
 }

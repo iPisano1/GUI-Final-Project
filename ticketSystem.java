@@ -12,10 +12,15 @@ public class ticketSystem{
    // WORK IN PROGRESS
    // private ArrayList<Movie> movies;
    
+   CardLayout cardLayout = new CardLayout();
+
    JFrame loginFrame;
    JFrame mainFrame;
-   JFrame bookingFrame;
+   // JFrame bookingFrame;
    JPanel loginPanel;
+   JPanel mainViewPanel = new JPanel(cardLayout);;
+   JPanel homePanel;
+   JPanel bookingPanel;
    JTextField userField;
    JPasswordField passField;
    JLabel errorLabel;
@@ -38,7 +43,7 @@ public class ticketSystem{
    
    public ticketSystem(){
       
-      mainUI();
+      loginUI();
       
    }
    
@@ -56,7 +61,7 @@ public class ticketSystem{
       
       errorLabel = new JLabel();
       errorLabel.setForeground(Color.RED);
-      errorLabel.setVisible(false); // Initially hidden
+      errorLabel.setVisible(false);
       
       loginPanel = new JPanel();
       loginPanel.setLayout(new GridBagLayout());
@@ -109,99 +114,67 @@ public class ticketSystem{
       mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       mainFrame.setLocationRelativeTo(null);
       mainFrame.getContentPane().setBackground(Color.black);
-      mainFrame.setLayout(null);
-      
+      mainFrame.setLayout(new BorderLayout(10, 10));   
+
+      homePanel = new JPanel();
+      homePanel.setLayout(new BorderLayout());
+      homePanel.setBackground(Color.black);
+
+      JPanel headerPanel = new JPanel();
+      headerPanel.setLayout(new BorderLayout());
+      headerPanel.setBackground(Color.black);
+      headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 35, 10, 45));
+
       JLabel titleLabel = new JLabel("NetFlex");
       titleLabel.setFont(new Font("Fira Code", Font.BOLD, 30));
-      titleLabel.setBounds(30, 10, 400, 50);
       titleLabel.setForeground(Color.decode("#DB202C"));
       
       JButton logOutButton = new JButton("Log Out");
-      logOutButton.setBounds(650, 17, 100, 40);
       logOutButton.setFocusPainted(false);
+      logOutButton.setFont(new Font("mono space", Font.BOLD, 15));
+      logOutButton.setPreferredSize(new Dimension(90, 20));
       logOutButton.setBackground(Color.black);
       logOutButton.setForeground(Color.white);
-      logOutButton.setBorder(BorderFactory.createLineBorder(Color.decode("#DB202C")));
+      logOutButton.setBorder(BorderFactory.createEmptyBorder(13, 10, 10, 10));
       logOutButton.addActionListener(new movieButtonListener());
       logOutButton.setActionCommand("out");
+
+      JPanel movieSelectionPanel = new JPanel();
+      movieSelectionPanel.setBackground(Color.black);
+      movieSelectionPanel.setLayout(new GridLayout(2, 5, 20, 50));
+      movieSelectionPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 20, 20));
       
-      JPanel sectionPanel1 = new JPanel();
-      sectionPanel1.setBackground(Color.black);
-      sectionPanel1.setBounds(30, 310, 725, 150);
-      sectionPanel1.setLayout(new GridLayout(1, 5, 20, 100));
-      
-      JPanel sectionPanel2 = new JPanel();
-      sectionPanel2.setBackground(Color.black);
-      sectionPanel2.setBounds(30, 480, 725, 150);
-      sectionPanel2.setLayout(new GridLayout(1, 5, 20, 100));
-      
+      // Movie Selection Buttons
       JButton[] buttons = new JButton[10];
-      for (int i = 0; i < 10; i++) {
+      for(int i = 0; i < 10; i++){
          buttons[i] = new JButton("Movie " + (i + 1));
          buttons[i].setFocusPainted(false);
-         buttons[i].setActionCommand("" + (i + 1) + "");
-         buttons[i].addActionListener(new movieButtonListener()); 
+         buttons[i].setActionCommand("" + (i + 1));
+         buttons[i].addActionListener(new movieButtonListener());
          buttons[i].setBackground(Color.decode("#5c5b5b"));
          buttons[i].setForeground(Color.white);
          buttons[i].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
-         
-         try{
-            if(i == 0){
-               ImageIcon movie1Icon = new ImageIcon("image/movie1.jpg");
-               Image scaledImage = movie1Icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-               ImageIcon resizedIcon = new ImageIcon(scaledImage);
-               buttons[i].setIcon(resizedIcon);
-               buttons[i].setText("");
-               buttons[i].setHorizontalAlignment(SwingConstants.CENTER);
-               buttons[i].setVerticalAlignment(SwingConstants.CENTER);
-            }else if(i == 1){
-               ImageIcon movie1Icon = new ImageIcon("image/movie2.jpeg");
-               Image scaledImage = movie1Icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-               ImageIcon resizedIcon = new ImageIcon(scaledImage);
-               buttons[i].setIcon(resizedIcon);
-               buttons[i].setText("");
-               buttons[i].setHorizontalAlignment(SwingConstants.CENTER);
-               buttons[i].setVerticalAlignment(SwingConstants.CENTER);
-            }else if(i == 2){
-               ImageIcon movie1Icon = new ImageIcon("image/movie3.jpg");
-               Image scaledImage = movie1Icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-               ImageIcon resizedIcon = new ImageIcon(scaledImage);
-               buttons[i].setIcon(resizedIcon);
-               buttons[i].setText("");
-               buttons[i].setHorizontalAlignment(SwingConstants.CENTER);
-               buttons[i].setVerticalAlignment(SwingConstants.CENTER);
-            }else if(i == 3){
-               ImageIcon movie1Icon = new ImageIcon("image/movie4.jpg");
-               Image scaledImage = movie1Icon.getImage().getScaledInstance(130, 150, Image.SCALE_SMOOTH);
-               ImageIcon resizedIcon = new ImageIcon(scaledImage);
-               buttons[i].setIcon(resizedIcon);
-               buttons[i].setText("");
-               buttons[i].setHorizontalAlignment(SwingConstants.CENTER);
-               buttons[i].setVerticalAlignment(SwingConstants.CENTER);
-            }else if(i == 4){
-               ImageIcon movie1Icon = new ImageIcon("image/movie5.jpg");
-               Image scaledImage = movie1Icon.getImage().getScaledInstance(130, 150, Image.SCALE_SMOOTH);
-               ImageIcon resizedIcon = new ImageIcon(scaledImage);
-               buttons[i].setIcon(resizedIcon);
-               buttons[i].setText("");
-               buttons[i].setHorizontalAlignment(SwingConstants.CENTER);
-               buttons[i].setVerticalAlignment(SwingConstants.CENTER);
-            }
-         }catch(Exception e){
-            buttons[i].setText("No Image");  
-         }
-         if(i < 5){
-            sectionPanel1.add(buttons[i]);
-         } 
-         else{
-            sectionPanel2.add(buttons[i]);
-         }
+      try{
+         ImageIcon movieIcon = new ImageIcon("image/movie" + (i + 1) + ".jpg");
+         Image scaledImage = movieIcon.getImage().getScaledInstance(150, 230, Image.SCALE_SMOOTH);
+         buttons[i].setIcon(new ImageIcon(scaledImage));
+         buttons[i].setText("");
+      }catch (Exception e){
+         buttons[i].setText("No Image");
+      }
+         movieSelectionPanel.add(buttons[i]);
       }
       
-      mainFrame.add(titleLabel);
-      mainFrame.add(logOutButton);
-      mainFrame.add(sectionPanel1);
-      mainFrame.add(sectionPanel2);
+      headerPanel.add(titleLabel, BorderLayout.WEST);
+      headerPanel.add(logOutButton, BorderLayout.EAST);
+
+      homePanel.add(headerPanel, BorderLayout.NORTH);
+      homePanel.add(movieSelectionPanel, BorderLayout.SOUTH);
+
+      mainViewPanel.add(homePanel, BorderLayout.CENTER);
+      mainViewPanel.add(homePanel, "homePanel");
+
+      mainFrame.add(mainViewPanel);
       mainFrame.setVisible(true);
       
    }
@@ -211,16 +184,13 @@ public class ticketSystem{
       bookingWindow = true;
    
       Border etch = BorderFactory.createEtchedBorder();
-      bookingFrame = new JFrame("Booking Screen");
-      bookingFrame.setSize(500, 350);
-      bookingFrame.setResizable(false);
-      bookingFrame.setLocationRelativeTo(null);
-      bookingFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-      bookingFrame.setLayout(new BorderLayout(10, 10));
       
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.insets = new Insets(5, 5, 5, 5);
-        
+      
+      bookingPanel = new JPanel();
+      bookingPanel.setLayout(new BorderLayout(10, 10));
+
       JPanel buyerPanel = new JPanel();
       buyerPanel.setLayout(new GridBagLayout());
       buyerPanel.setBorder(BorderFactory.createTitledBorder(etch, "Enter Details"));
@@ -322,13 +292,24 @@ public class ticketSystem{
       JPanel buttonPanel = new JPanel();
       JButton nextButton = new JButton("Next");
       nextButton.setFocusPainted(false);
+      nextButton.setActionCommand("next");
+      nextButton.addActionListener(new bookingButtonListener());
+
+      JButton backButton = new JButton("Back");
+      backButton.setFocusPainted(false);
+      backButton.setActionCommand("back");
+      backButton.addActionListener(new bookingButtonListener());
       
       buttonPanel.add(nextButton);
+      buttonPanel.add(backButton);
            
-      bookingFrame.add(buyerPanel, BorderLayout.NORTH);
-      bookingFrame.add(ticketPanel, BorderLayout.CENTER);
-      bookingFrame.add(buttonPanel, BorderLayout.SOUTH);
-      bookingFrame.setVisible(true);
+      bookingPanel.add(buyerPanel, BorderLayout.NORTH);
+      bookingPanel.add(ticketPanel, BorderLayout.CENTER);
+      bookingPanel.add(buttonPanel, BorderLayout.SOUTH);
+      
+      mainViewPanel.add(bookingPanel, BorderLayout.CENTER);
+      mainViewPanel.add(bookingPanel, "bookingPanel");
+
       
    }
    
@@ -338,14 +319,22 @@ public class ticketSystem{
          
          String command = e.getActionCommand();
          
-         if(bookingWindow){
-            bookingFrame.dispose();
-         }
+         // if(bookingWindow){
+         //    bookingFrame.dispose();
+         // }
          if(command.equals("out")){
             mainFrame.dispose();
             loginUI();
-         }else{
+         }
+         else{
+
+            if(bookingPanel == null){
+               bookingUI();
+            }
+            
+            ticketsField.setText("0");
             totalPayment.setText("0");
+
             switch(command){
                
                case "1":
@@ -384,7 +373,7 @@ public class ticketSystem{
                   System.out.println("Clicked Button 10");
                   break;  
             }
-            bookingUI();
+            cardLayout.show(mainViewPanel, "bookingPanel");
          } 
       }
       
@@ -410,6 +399,12 @@ public class ticketSystem{
                num += 1;
                break;
          }
+
+         if(command.equals("back")){
+            cardLayout.previous(mainViewPanel);
+         }else if(command.equals("next")){
+            System.out.println("Next");
+         }
          
          ticketsField.setText(String.valueOf(num));
          
@@ -428,7 +423,7 @@ public class ticketSystem{
       public void actionPerformed(ActionEvent e){
          
          String user = userField.getText();
-         String pass = passField.getText();
+         String pass = new String(((JPasswordField) passField).getPassword());
          
          if(user.equals(ADMIN_USERNAME) && pass.equals(ADMIN_PASSWORD)){
             loginFrame.setVisible(false);
