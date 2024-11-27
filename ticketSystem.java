@@ -1,3 +1,5 @@
+// Please send suggestions sa gc
+
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -6,25 +8,21 @@ import java.util.*;
 
 public class ticketSystem{
    
+   // ADMIN ACCOUNT ACCESS
    private static final String ADMIN_USERNAME = "admin";
    private static final String ADMIN_PASSWORD = "admin";
    
-   // WORK IN PROGRESS
+   // ENCAPSULATION
    private ArrayList<Movie> movies;
    
    CardLayout cardLayout = new CardLayout();
-
-   JFrame loginFrame;
-   JFrame mainFrame;
-   // JFrame bookingFrame;
+   JFrame loginFrame, mainFrame;
    JPanel loginPanel;
    JPanel mainViewPanel = new JPanel(cardLayout);;
-   JPanel homePanel;
-   JPanel bookingPanel;
+   JPanel homePanel, bookingPanel;
    JTextField userField;
    JPasswordField passField;
    JLabel errorLabel;
-   
    JTextField ticketsField;
    
    public int totalAmountToPay;
@@ -39,6 +37,7 @@ public class ticketSystem{
    
    }
    
+   // Initialize Movies
    private void initializeMovies() {
       movies = new ArrayList<>();
       movies.add(new Movie("Inside Out", 450, "image/movie1.jpg"));
@@ -46,13 +45,14 @@ public class ticketSystem{
       movies.add(new Movie("How to Train Your Dragon", 250, "image/movie3.jpg"));
       movies.add(new Movie("Minions", 350, "image/movie4.jpg"));
       movies.add(new Movie("Kung Fu Panda", 280, "image/movie5.jpg"));
-      movies.add(new Movie("Movie 6", 300, "image/movie6.jpg"));
-      movies.add(new Movie("Movie 7", 300, "image/movie7.jpg"));
-      movies.add(new Movie("Movie 8", 300, "image/movie8.jpg"));
-      movies.add(new Movie("Movie 9", 300, "image/movie9.jpg"));
-      movies.add(new Movie("Movie 10", 300, "image/movie10.jpg"));
+      movies.add(new Movie("Movie 6", 0, "image/movie6.jpg"));
+      movies.add(new Movie("Movie 7", 0, "image/movie7.jpg"));
+      movies.add(new Movie("Movie 8", 0, "image/movie8.jpg"));
+      movies.add(new Movie("Movie 9", 0, "image/movie9.jpg"));
+      movies.add(new Movie("Movie 10", 0, "image/movie10.jpg"));
    }
 
+   // Constructor
    public ticketSystem(){
       
       initializeMovies();
@@ -60,6 +60,7 @@ public class ticketSystem{
       
    }
    
+   // Login UI Frame
    public void loginUI(){
       
       loginFrame = new JFrame("Login");
@@ -119,6 +120,7 @@ public class ticketSystem{
       
    }
    
+   // Main UI Frame
    public void mainUI(){
       
       mainFrame = new JFrame("NetFlex");
@@ -154,22 +156,23 @@ public class ticketSystem{
 
       JPanel movieSelectionPanel = new JPanel();
       movieSelectionPanel.setBackground(Color.black);
-      movieSelectionPanel.setLayout(new GridLayout(2, 5, 20, 50));
+      movieSelectionPanel.setLayout(new GridLayout(2, 5, 20, 20));
       movieSelectionPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 20, 20));
       
       // Movie Selection Buttons
+      // Thank you ani sir!
       JButton[] buttons = new JButton[10];
       for (int i = 0; i < movies.size(); i++) {
          Movie movie = movies.get(i);
          JButton movieButton = new JButton();
          movieButton.setFocusPainted(false);
-         movieButton.setActionCommand(String.valueOf(i)); // Use the index as command
+         movieButton.setActionCommand(String.valueOf(i));
          movieButton.addActionListener(new movieButtonListener());
          movieButton.setBackground(Color.decode("#5c5b5b"));
          movieButton.setForeground(Color.white);
          movieButton.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
 
-         // Set movie image or default text
+         //Exception Handler if image file is missing or invalid
          try {
                ImageIcon movieIcon = new ImageIcon(movie.getImagePath());
                Image scaledImage = movieIcon.getImage().getScaledInstance(150, 230, Image.SCALE_SMOOTH);
@@ -195,15 +198,22 @@ public class ticketSystem{
       
    }
    
+   // Booking Panel UI
+   // Subject to change //
    public void bookingUI(){
-   
+      
       Border etch = BorderFactory.createEtchedBorder();
       
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.insets = new Insets(5, 5, 5, 5);
-      
+
       bookingPanel = new JPanel();
-      bookingPanel.setLayout(new BorderLayout(10, 10));
+      bookingPanel.setLayout(new GridBagLayout());
+      bookingPanel.setBackground(Color.BLACK);
+
+      JPanel bookingScreenPanel = new JPanel();
+      bookingScreenPanel.setLayout(new BorderLayout(10, 10));
+      bookingScreenPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
       JPanel buyerPanel = new JPanel();
       buyerPanel.setLayout(new GridBagLayout());
@@ -217,7 +227,6 @@ public class ticketSystem{
       
       JLabel phoneLabel = new JLabel("Phone No: ");
       JTextField phoneField = new JTextField(32);
-      
       
       gbc.gridx = 0;
       gbc.gridy = 0;
@@ -304,6 +313,7 @@ public class ticketSystem{
       ticketPanel.add(totalPayment, gbc);
       
       JPanel buttonPanel = new JPanel();
+      buttonPanel.setLayout(new BorderLayout());
       JButton nextButton = new JButton("Next");
       nextButton.setFocusPainted(false);
       nextButton.setActionCommand("next");
@@ -314,28 +324,39 @@ public class ticketSystem{
       backButton.setActionCommand("back");
       backButton.addActionListener(new bookingButtonListener());
       
-      buttonPanel.add(nextButton);
-      buttonPanel.add(backButton);
-           
-      bookingPanel.add(buyerPanel, BorderLayout.NORTH);
-      bookingPanel.add(ticketPanel, BorderLayout.CENTER);
-      bookingPanel.add(buttonPanel, BorderLayout.SOUTH);
+      buttonPanel.add(backButton, BorderLayout.WEST);
+      buttonPanel.add(nextButton, BorderLayout.EAST);
+
+      bookingScreenPanel.add(buyerPanel, BorderLayout.NORTH);
+      bookingScreenPanel.add(ticketPanel, BorderLayout.CENTER);
+      bookingScreenPanel.add(buttonPanel, BorderLayout.SOUTH);
       
+      gbc.gridx = 0;
+      gbc.gridy = 0;
+      gbc.anchor = GridBagConstraints.CENTER;
+      bookingPanel.add(bookingScreenPanel, gbc);
+
       mainViewPanel.add(bookingPanel, BorderLayout.CENTER);
       mainViewPanel.add(bookingPanel, "bookingPanel");
 
       
    }
    
+   // Listener for Movie Buttons
    public class movieButtonListener implements ActionListener {
 
       public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
 
+            if (bookingPanel == null) {
+               bookingUI();
+            }
             if (command.equals("out")) {
                mainFrame.dispose();
                loginUI();
             } else {
+               ticketsField.setText("0");
+               totalPayment.setText("0");
                int movieIndex = Integer.parseInt(command);
                Movie selectedMovie = movies.get(movieIndex);
 
@@ -344,9 +365,6 @@ public class ticketSystem{
                moviePriceLabel.setText(String.valueOf(selectedMovie.getPrice()));
 
                // Initialize booking panel if necessary
-               if (bookingPanel == null) {
-                  bookingUI();
-               }
 
                // Show booking panel
                cardLayout.show(mainViewPanel, "bookingPanel");
@@ -354,7 +372,7 @@ public class ticketSystem{
       }
    }
   
-   
+   // Listener for Booking Panel
    public class bookingButtonListener implements ActionListener{
    
       public void actionPerformed(ActionEvent e){
@@ -394,6 +412,7 @@ public class ticketSystem{
    
    }
    
+   // Listener for loginUI
    public class loginButtonListener implements ActionListener{
    
       public void actionPerformed(ActionEvent e){
