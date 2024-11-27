@@ -10,7 +10,7 @@ public class ticketSystem{
    private static final String ADMIN_PASSWORD = "admin";
    
    // WORK IN PROGRESS
-   // private ArrayList<Movie> movies;
+   private ArrayList<Movie> movies;
    
    CardLayout cardLayout = new CardLayout();
 
@@ -27,8 +27,6 @@ public class ticketSystem{
    
    JTextField ticketsField;
    
-   public boolean bookingWindow = false;
-   
    public int totalAmountToPay;
    
    JLabel movieTitleLabel = new JLabel("Invalid");
@@ -41,8 +39,23 @@ public class ticketSystem{
    
    }
    
+   private void initializeMovies() {
+      movies = new ArrayList<>();
+      movies.add(new Movie("Inside Out", 450, "image/movie1.jpg"));
+      movies.add(new Movie("Frozen", 320, "image/movie2.jpg"));
+      movies.add(new Movie("How to Train Your Dragon", 250, "image/movie3.jpg"));
+      movies.add(new Movie("Minions", 350, "image/movie4.jpg"));
+      movies.add(new Movie("Kung Fu Panda", 280, "image/movie5.jpg"));
+      movies.add(new Movie("Movie 6", 300, "image/movie6.jpg"));
+      movies.add(new Movie("Movie 7", 300, "image/movie7.jpg"));
+      movies.add(new Movie("Movie 8", 300, "image/movie8.jpg"));
+      movies.add(new Movie("Movie 9", 300, "image/movie9.jpg"));
+      movies.add(new Movie("Movie 10", 300, "image/movie10.jpg"));
+   }
+
    public ticketSystem(){
       
+      initializeMovies();
       loginUI();
       
    }
@@ -146,23 +159,26 @@ public class ticketSystem{
       
       // Movie Selection Buttons
       JButton[] buttons = new JButton[10];
-      for(int i = 0; i < 10; i++){
-         buttons[i] = new JButton("Movie " + (i + 1));
-         buttons[i].setFocusPainted(false);
-         buttons[i].setActionCommand("" + (i + 1));
-         buttons[i].addActionListener(new movieButtonListener());
-         buttons[i].setBackground(Color.decode("#5c5b5b"));
-         buttons[i].setForeground(Color.white);
-         buttons[i].setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
-      try{
-         ImageIcon movieIcon = new ImageIcon("image/movie" + (i + 1) + ".jpg");
-         Image scaledImage = movieIcon.getImage().getScaledInstance(150, 230, Image.SCALE_SMOOTH);
-         buttons[i].setIcon(new ImageIcon(scaledImage));
-         buttons[i].setText("");
-      }catch (Exception e){
-         buttons[i].setText("No Image");
-      }
-         movieSelectionPanel.add(buttons[i]);
+      for (int i = 0; i < movies.size(); i++) {
+         Movie movie = movies.get(i);
+         JButton movieButton = new JButton();
+         movieButton.setFocusPainted(false);
+         movieButton.setActionCommand(String.valueOf(i)); // Use the index as command
+         movieButton.addActionListener(new movieButtonListener());
+         movieButton.setBackground(Color.decode("#5c5b5b"));
+         movieButton.setForeground(Color.white);
+         movieButton.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.gray));
+
+         // Set movie image or default text
+         try {
+               ImageIcon movieIcon = new ImageIcon(movie.getImagePath());
+               Image scaledImage = movieIcon.getImage().getScaledInstance(150, 230, Image.SCALE_SMOOTH);
+               movieButton.setIcon(new ImageIcon(scaledImage));
+         } catch (Exception e) {
+               movieButton.setText(movie.getTitle());
+         }
+
+         movieSelectionPanel.add(movieButton);
       }
       
       headerPanel.add(titleLabel, BorderLayout.WEST);
@@ -180,8 +196,6 @@ public class ticketSystem{
    }
    
    public void bookingUI(){
-      
-      bookingWindow = true;
    
       Border etch = BorderFactory.createEtchedBorder();
       
@@ -313,71 +327,33 @@ public class ticketSystem{
       
    }
    
-   public class movieButtonListener implements ActionListener{
-      
-      public void actionPerformed(ActionEvent e){
-         
-         String command = e.getActionCommand();
-         
-         // if(bookingWindow){
-         //    bookingFrame.dispose();
-         // }
-         if(command.equals("out")){
-            mainFrame.dispose();
-            loginUI();
-         }
-         else{
+   public class movieButtonListener implements ActionListener {
 
-            if(bookingPanel == null){
-               bookingUI();
-            }
-            
-            ticketsField.setText("0");
-            totalPayment.setText("0");
+      public void actionPerformed(ActionEvent e) {
+            String command = e.getActionCommand();
 
-            switch(command){
-               
-               case "1":
-                  movieTitleLabel.setText("Inside Out");
-                  moviePriceLabel.setText("450");
-                  break;
-               case "2":
-                  movieTitleLabel.setText("Frozen");
-                  moviePriceLabel.setText("320");
-                  break;
-               case "3":
-                  movieTitleLabel.setText("How to Train your Dragon");
-                  moviePriceLabel.setText("250");
-                  break;
-               case "4":
-                  movieTitleLabel.setText("Minions");
-                  moviePriceLabel.setText("350");
-                  break;
-               case "5":
-                  movieTitleLabel.setText("Kung Fu Panda");
-                  moviePriceLabel.setText("280");
-                  break;
-               case "6":
-                  System.out.println("Clicked Button 6");
-                  break;
-               case "7":
-                  System.out.println("Clicked Button 7");
-                  break;
-               case "8":
-                  System.out.println("Clicked Button 8");
-                  break;
-               case "9":
-                  System.out.println("Clicked Button 9");
-                  break;
-               case "10":
-                  System.out.println("Clicked Button 10");
-                  break;  
+            if (command.equals("out")) {
+               mainFrame.dispose();
+               loginUI();
+            } else {
+               int movieIndex = Integer.parseInt(command);
+               Movie selectedMovie = movies.get(movieIndex);
+
+               // Update labels with selected movie details
+               movieTitleLabel.setText(selectedMovie.getTitle());
+               moviePriceLabel.setText(String.valueOf(selectedMovie.getPrice()));
+
+               // Initialize booking panel if necessary
+               if (bookingPanel == null) {
+                  bookingUI();
+               }
+
+               // Show booking panel
+               cardLayout.show(mainViewPanel, "bookingPanel");
             }
-            cardLayout.show(mainViewPanel, "bookingPanel");
-         } 
       }
-      
    }
+  
    
    public class bookingButtonListener implements ActionListener{
    
