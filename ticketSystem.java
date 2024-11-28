@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class ticketSystem{
+public class TicketSystem{
    
    // ADMIN ACCOUNT ACCESS
    private static final String ADMIN_USERNAME = "admin";
@@ -41,7 +41,7 @@ public class ticketSystem{
    
    public static void main(String[] args){
       
-      new ticketSystem();
+      new TicketSystem();
    
    }
    
@@ -66,7 +66,7 @@ public class ticketSystem{
    }
 
    // Constructor
-   public ticketSystem(){
+   public TicketSystem(){
       
       initializeMovies();
       loginUI();
