@@ -53,7 +53,7 @@ public class ticketSystem{
       movies.add(new Movie("How to Train Your Dragon", 250, "image/movie3.jpg", "Children's Film"));
       movies.add(new Movie("Minions", 350, "image/movie4.jpg", "Children's Film"));
       movies.add(new Movie("Kung Fu Panda", 280, "image/movie5.jpg", "Children's Film"));
-      movies.add(new Movie("The Amazing Spider-Man", 250, "image/movie6.jpg", "Superhero"));
+      movies.add(new Movie("Spider-Man", 250, "image/movie6.jpg", "Superhero"));
       movies.add(new Movie("Hulk", 180, "image/movie7.jpg", "Superhero"));
       movies.add(new Movie("Aquaman", 320, "image/movie8.jpg", "Superhero"));
       movies.add(new Movie("Wonder Woman", 290, "image/movie9.jpg", "Superhero"));
@@ -136,6 +136,10 @@ public class ticketSystem{
    // Main UI Frame
    public void mainUI(){
       
+      mainViewPanel.removeAll();
+      mainViewPanel.revalidate();
+      mainViewPanel.repaint();
+
       // GridBagLayout insets for headerPanel
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.insets = new Insets(5, 5, 5, 5);
@@ -234,6 +238,8 @@ public class ticketSystem{
       
       JButton selectMovieButton = new JButton("Select");
       selectMovieButton.setFocusPainted(false);
+      selectMovieButton.setBackground(Color.black);
+      selectMovieButton.setForeground(Color.white);
       selectMovieButton.setActionCommand("select");
       selectMovieButton.addActionListener(new movieButtonListener());
 
@@ -294,7 +300,6 @@ public class ticketSystem{
       gbcDisplay.gridwidth = 0;
       gbcDisplay.weighty = 1;
       gbcDisplay.anchor = GridBagConstraints.CENTER;
-      gbcDisplay.fill = GridBagConstraints.BOTH;
       ImageDisplayPanel.add(movieImageDisplay, gbcDisplay);
 
       // Center Text Display
@@ -352,7 +357,7 @@ public class ticketSystem{
    // Booking Panel UI
    // Subject to change //
    public void bookingUI(){
-      
+
       Border etch = BorderFactory.createEtchedBorder();
       
       GridBagConstraints gbc = new GridBagConstraints();
@@ -405,8 +410,8 @@ public class ticketSystem{
       ticketPanel.setLayout(new GridBagLayout());
       ticketPanel.setBorder(BorderFactory.createTitledBorder(etch, "Buy Ticket"));
       
-      JLabel titleLabel = new JLabel("Movie: ");
-      JLabel priceLabel = new JLabel("Price: ");
+      JLabel titleLabel = new JLabel("Movie:");
+      JLabel priceLabel = new JLabel("Price:");
       
       JLabel ticketsLabel = new JLabel("Tickets:");
       
@@ -487,53 +492,50 @@ public class ticketSystem{
       gbc.anchor = GridBagConstraints.CENTER;
       bookingPanel.add(bookingScreenPanel, gbc);
 
-      mainViewPanel.add(bookingPanel, BorderLayout.CENTER);
       mainViewPanel.add(bookingPanel, "bookingPanel");
 
-      
    }
    
    // Listener for Movie Buttons
-   public class movieButtonListener implements ActionListener {
-      public void actionPerformed(ActionEvent e) {
-          String command = e.getActionCommand();
+   public class movieButtonListener implements ActionListener{
+      public void actionPerformed(ActionEvent e){
+         String command = e.getActionCommand();
   
-          try{
-              if(command.equals("out")){
-                  mainFrame.dispose();
-                  loginUI();
-              }else if(command.equals("select")){
+         try{
+            if(command.equals("out")){
+               mainFrame.dispose();
+               initializeMovies();
+               loginUI();
+            }else if(command.equals("select")){
 
-                  if (bookingPanel == null) {
-                      bookingUI();
-                  }
-  
-                  ticketsField.setText("0");
-                  totalPayment.setText("0");
-  
-                  movieTitleLabel.setText(movieTitleDisplay.getText());
-                  moviePriceLabel.setText(moviePriceDisplay.getText());
-  
-                  cardLayout.show(mainViewPanel, "bookingPanel");
-              }else{
+               bookingUI();
 
-                  int movieIndex = Integer.parseInt(command);
-                  Movie selectedMovie = movies.get(movieIndex);
-  
-                  ImageIcon movieDisplayIcon = new ImageIcon(selectedMovie.getImagePath());
-                  Image scaledDisplayImage = movieDisplayIcon.getImage().getScaledInstance(120, 150, Image.SCALE_SMOOTH);
-                  movieImageDisplay.setIcon(new ImageIcon(scaledDisplayImage));
-  
-                  movieTitleDisplay.setText(selectedMovie.getTitle());
-                  moviePriceDisplay.setText(String.valueOf(selectedMovie.getPrice()));
-                  movieGenreDisplay.setText(selectedMovie.getGenre());
-              }
-          }catch(NumberFormatException ex){
-              System.err.println("Invalid command: " + command);
-          }
+               ticketsField.setText("0");
+               totalPayment.setText("0");
+
+               movieTitleLabel.setText(movieTitleDisplay.getText());
+               moviePriceLabel.setText(moviePriceDisplay.getText());
+
+               cardLayout.show(mainViewPanel, "bookingPanel");
+               
+            }else{
+
+               int movieIndex = Integer.parseInt(command);
+               Movie selectedMovie = movies.get(movieIndex);
+
+               ImageIcon movieDisplayIcon = new ImageIcon(selectedMovie.getImagePath());
+               Image scaledDisplayImage = movieDisplayIcon.getImage().getScaledInstance(120, 150, Image.SCALE_SMOOTH);
+               movieImageDisplay.setIcon(new ImageIcon(scaledDisplayImage));
+
+               movieTitleDisplay.setText(selectedMovie.getTitle());
+               moviePriceDisplay.setText(String.valueOf(selectedMovie.getPrice()));
+               movieGenreDisplay.setText(selectedMovie.getGenre());
+            }
+         }catch(NumberFormatException ex){
+            System.err.println("Invalid command: " + command);
+         }
       }
    }
-  
   
    // Listener for Booking Panel
    public class bookingButtonListener implements ActionListener{
@@ -541,35 +543,35 @@ public class ticketSystem{
       public void actionPerformed(ActionEvent e){
          
          String command = e.getActionCommand();
-         int num = Integer.parseInt(ticketsField.getText());
+         int numTickets = Integer.parseInt(ticketsField.getText());
+         int moviePrice = Integer.parseInt(moviePriceLabel.getText());
          
          switch(command){
             
             case "dec":
-               if(num == 0){
-                  num = 0;
+               if(numTickets == 0){
+                  numTickets = 0;
                }else{
-                  num -= 1;   
+                  numTickets -= 1;   
                }    
                break;
-            case "add":
-               num += 1;
-               break;
-         }
 
-         if(command.equals("back")){
-            cardLayout.previous(mainViewPanel);
-         }else if(command.equals("next")){
-            System.out.println("Next");
+            case "add":
+            numTickets += 1;
+               break;
+
+            case "back":
+               cardLayout.show(mainViewPanel, "homePanel");
+               break;
+               
+            case "next":
+               System.out.println("Next");
+               break;
+
          }
          
-         ticketsField.setText(String.valueOf(num));
-         
-         int moviePrice = Integer.parseInt(moviePriceLabel.getText());
-         totalAmountToPay = Integer.parseInt(totalPayment.getText());
-         
-         totalAmountToPay = moviePrice * num;
-         
+         ticketsField.setText(String.valueOf(numTickets));
+         totalAmountToPay = moviePrice * numTickets;
          totalPayment.setText(String.valueOf(totalAmountToPay));
       }
    
@@ -586,6 +588,7 @@ public class ticketSystem{
          if(user.equals(ADMIN_USERNAME) && pass.equals(ADMIN_PASSWORD)){
             loginFrame.setVisible(false);
             loginFrame.dispose();
+            initializeMovies();
             mainUI();
          }else{
             errorLabel.setText("Invalid username or password");
@@ -594,7 +597,6 @@ public class ticketSystem{
             passField.setText("");
          }
 
-         
       }
    
    }
