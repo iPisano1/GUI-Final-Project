@@ -503,7 +503,7 @@ public class ticketSystem{
                   mainFrame.dispose();
                   loginUI();
               }else if(command.equals("select")){
-                  // Ensure booking UI is initialized
+
                   if (bookingPanel == null) {
                       bookingUI();
                   }
@@ -511,17 +511,15 @@ public class ticketSystem{
                   ticketsField.setText("0");
                   totalPayment.setText("0");
   
-                  // Update booking panel labels
                   movieTitleLabel.setText(movieTitleDisplay.getText());
                   moviePriceLabel.setText(moviePriceDisplay.getText());
   
                   cardLayout.show(mainViewPanel, "bookingPanel");
               }else{
-                  // Treat as a movie index
+
                   int movieIndex = Integer.parseInt(command);
                   Movie selectedMovie = movies.get(movieIndex);
   
-                  // Update display details
                   ImageIcon movieDisplayIcon = new ImageIcon(selectedMovie.getImagePath());
                   Image scaledDisplayImage = movieDisplayIcon.getImage().getScaledInstance(120, 150, Image.SCALE_SMOOTH);
                   movieImageDisplay.setIcon(new ImageIcon(scaledDisplayImage));
@@ -530,7 +528,7 @@ public class ticketSystem{
                   moviePriceDisplay.setText(String.valueOf(selectedMovie.getPrice()));
                   movieGenreDisplay.setText(selectedMovie.getGenre());
               }
-          }catch (NumberFormatException ex){
+          }catch(NumberFormatException ex){
               System.err.println("Invalid command: " + command);
           }
       }
