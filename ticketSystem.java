@@ -1,6 +1,7 @@
 // Please send suggestions sa gc
 // Day 1 - Naka Set nakog Layout sa home window and booking window nya kuwang nalang og search function para ma completo.
 // Day 2 - Encountered an issue inig logout nya log in balik kay dili na mo loading ang movies sa display.
+// Day 3 - Added a Search Function and Scroll Bar para sa movie catalog. Still trying na mag encapsulation para less hassle mag add og remove sa codes. 
 
 import javax.swing.*;
 import javax.swing.border.*;
@@ -8,7 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class TicketSystem{
+public class ticketSystem{
    
    // ADMIN ACCOUNT ACCESS
    private static final String ADMIN_USERNAME = "admin";
@@ -21,12 +22,13 @@ public class TicketSystem{
    JFrame loginFrame, mainFrame;
    JPanel loginPanel;
    JPanel mainViewPanel = new JPanel(cardLayout);;
-   JPanel homePanel, bookingPanel;
+   JPanel homePanel, bookingPanel, seatSelectionPanel;
    JTextField userField;
    JPasswordField passField;
    JLabel errorLabel;
    JTextField ticketsField;
-   
+   JTextField searchField;
+
    public int totalAmountToPay;
    
    JLabel movieImageDisplay = new JLabel();
@@ -34,14 +36,19 @@ public class TicketSystem{
    JLabel moviePriceDisplay = new JLabel("450");
    JLabel movieGenreDisplay = new JLabel("Children's Film");
 
+   JLabel ticketImageDisplay = new JLabel();
    JLabel movieTitleLabel = new JLabel("Invalid");
    JLabel moviePriceLabel = new JLabel("0");
    JLabel movieGenreLabel = new JLabel("None");
    JLabel totalPayment = new JLabel("0");
    
+   JLabel selectionMovieDisplay = new JLabel();
+   JLabel ticketQuantity = new JLabel();
+   JLabel selectionErrorLabel = new JLabel();
+
    public static void main(String[] args){
       
-      new TicketSystem();
+      new ticketSystem();
    
    }
    
@@ -53,20 +60,25 @@ public class TicketSystem{
       movies.add(new Movie("How to Train Your Dragon", 250, "image/movie3.jpg", "Children's Film"));
       movies.add(new Movie("Minions", 350, "image/movie4.jpg", "Children's Film"));
       movies.add(new Movie("Kung Fu Panda", 280, "image/movie5.jpg", "Children's Film"));
-      movies.add(new Movie("Spider-Man", 250, "image/movie6.jpg", "Superhero"));
+      movies.add(new Movie("Spider Man", 250, "image/movie6.jpg", "Superhero"));
       movies.add(new Movie("Hulk", 180, "image/movie7.jpg", "Superhero"));
       movies.add(new Movie("Aquaman", 320, "image/movie8.jpg", "Superhero"));
       movies.add(new Movie("Wonder Woman", 290, "image/movie9.jpg", "Superhero"));
       movies.add(new Movie("Man Of Steel", 230, "image/movie10.jpg", "Superhero"));
-      // movies.add(new Movie("Movie 11", 0, "image/movie11.jpg", "none"));
-      // movies.add(new Movie("Movie 12", 0, "image/movie12.jpg", "none"));
-      // movies.add(new Movie("Movie 13", 0, "image/movie13.jpg", "none"));
-      // movies.add(new Movie("Movie 14", 0, "image/movie14.jpg", "none"));
-      // movies.add(new Movie("Movie 15", 0, "image/movie15.jpg", "none"));
+      movies.add(new Movie("Top Gun Maverick" , 280,"image/movie11.jpg", "Action"));
+      movies.add(new Movie("John Wick", 380, "image/movie12.jpg", "Action"));
+      movies.add(new Movie("Fast and Furious", 230, "image/movie13.jpg", "Action"));
+      movies.add(new Movie("Baby Driver", 250, "image/movie14.jpg", "Action"));
+      movies.add(new Movie("Extraction", 320, "image/movie15.jpg", "Action"));
+      movies.add(new Movie("The Conjuring", 280, "image/movie16.jpg", "Horror"));
+      movies.add(new Movie("Ready Or Not", 320, "image/movie17.jpg", "Horror"));
+      movies.add(new Movie("Annabelle", 320, "image/movie18.jpg", "Horror"));
+      movies.add(new Movie("UnFriended", 220, "image/movie19.jpg", "Horror"));
+      movies.add(new Movie("The Ring", 280, "image/movie20.jpg", "Horror"));
    }
 
    // Constructor
-   public TicketSystem(){
+   public ticketSystem(){
       
       initializeMovies();
       loginUI();
@@ -77,6 +89,7 @@ public class TicketSystem{
    public void loginUI(){
       
       loginFrame = new JFrame("Login");
+      loginFrame.setIconImage(new ImageIcon("image/logo.png").getImage());
       loginFrame.setSize(320, 170);
       loginFrame.setResizable(false);
       loginFrame.setLocationRelativeTo(null);
@@ -139,13 +152,19 @@ public class TicketSystem{
       mainViewPanel.removeAll();
       mainViewPanel.revalidate();
       mainViewPanel.repaint();
+      
+      // Set Default Movie to Display
+      movieTitleDisplay.setText("Inside Out");
+      moviePriceDisplay.setText("450");
+      movieGenreDisplay.setText("Children's Film");
 
       // GridBagLayout insets for headerPanel
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.insets = new Insets(5, 5, 5, 5);
 
       mainFrame = new JFrame("NETFLEX");
-      mainFrame.setSize(800, 700);
+      mainFrame.setIconImage(new ImageIcon("image/logo.png").getImage());
+      mainFrame.setSize(1000, 900);
       mainFrame.setResizable(false);
       mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       mainFrame.setLocationRelativeTo(null);
@@ -160,10 +179,10 @@ public class TicketSystem{
       JPanel headerPanel = new JPanel();
       headerPanel.setLayout(new GridBagLayout());
       headerPanel.setBackground(Color.black);
-      headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 10, 45));
+      headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 10, 25));
 
       JLabel titleLabel = new JLabel("NETFLEX");
-      titleLabel.setFont(new Font("Fira Code", Font.BOLD, 30));
+      titleLabel.setFont(new Font("Fira Code", Font.BOLD, 35));
       titleLabel.setForeground(Color.decode("#DB202C"));
       
       JButton logOutButton = new JButton("Log Out");
@@ -176,14 +195,20 @@ public class TicketSystem{
       logOutButton.addActionListener(new movieButtonListener());
       logOutButton.setActionCommand("out");
 
-      JTextField searchField = new JTextField(15);
+      // Search UI
+      searchField = new JTextField(25);
+      searchField.setBorder(BorderFactory.createLineBorder(Color.white));
+      searchField.setPreferredSize(new Dimension(80, 25));
       searchField.setFont(new Font("Fira Code", Font.PLAIN, 15));
 
       JButton searchButton = new JButton("Search");
       searchButton.setFocusPainted(false);
+      searchButton.setPreferredSize(new Dimension(80, 28));
       searchButton.setBackground(Color.black);
       searchButton.setForeground(Color.white);
-      searchButton.setPreferredSize(new Dimension(80, 25));
+      searchButton.setActionCommand("search");
+      searchButton.addActionListener(new movieButtonListener());
+      mainFrame.getRootPane().setDefaultButton(searchButton);
       
       // Center Panel
       JPanel centerHomePanel = new JPanel();
@@ -203,20 +228,22 @@ public class TicketSystem{
       ImageDisplayPanel.setBackground(Color.black);
       ImageDisplayPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0));
       ImageIcon movieDisplayIcon = new ImageIcon("image/movie1.jpg");
-      Image scaledDisplayImage = movieDisplayIcon.getImage().getScaledInstance(120, 150, Image.SCALE_SMOOTH);
+      Image scaledDisplayImage = movieDisplayIcon.getImage().getScaledInstance(170, 200, Image.SCALE_SMOOTH);
       movieImageDisplay.setIcon(new ImageIcon(scaledDisplayImage));
 
       // MOVIE TEXT PANEL
       GridBagConstraints gbcTextDisplay = new GridBagConstraints();
       gbcTextDisplay.insets = new Insets(10, 10, 10, 10);
+      // DIPLAY TEXT PANEL
       JPanel textDisplayPanel = new JPanel();
       textDisplayPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
       textDisplayPanel.setBackground(Color.black);
       textDisplayPanel.setForeground(Color.white);
       textDisplayPanel.setLayout(new GridBagLayout());
       
-      Font textFont = new Font("Fira Code", Font.PLAIN, 12);
-      Font textFont2 = new Font("Fira Code", Font.BOLD, 12);
+      // DISPLAY BOX TEXT
+      Font textFont = new Font("Fira Code", Font.PLAIN, 15);
+      Font textFont2 = new Font("Fira Code", Font.BOLD, 15);
 
       JLabel titleText = new JLabel("Title:");
       titleText.setForeground(Color.white);
@@ -238,6 +265,7 @@ public class TicketSystem{
       
       JButton selectMovieButton = new JButton("Select");
       selectMovieButton.setFocusPainted(false);
+      selectMovieButton.setPreferredSize(new Dimension(100, 40));
       selectMovieButton.setBackground(Color.black);
       selectMovieButton.setForeground(Color.white);
       selectMovieButton.setActionCommand("select");
@@ -246,7 +274,7 @@ public class TicketSystem{
       // MOVIE SELECTION PANEL
       JPanel movieSelectionPanel = new JPanel();
       movieSelectionPanel.setBackground(Color.black);
-      movieSelectionPanel.setLayout(new GridLayout(2, 5, 20, 20));
+      movieSelectionPanel.setLayout(new GridLayout(0, 5, 20, 20));
       movieSelectionPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 20, 20));
       
       // Movie Selection Buttons (Footer)
@@ -264,7 +292,7 @@ public class TicketSystem{
          //Exception Handler if image file is missing or invalid
          try{
                ImageIcon movieIcon = new ImageIcon(movie.getImagePath());
-               Image scaledImage = movieIcon.getImage().getScaledInstance(130, 160, Image.SCALE_SMOOTH);
+               Image scaledImage = movieIcon.getImage().getScaledInstance(170, 200, Image.SCALE_SMOOTH);
                movieButton.setIcon(new ImageIcon(scaledImage));
          }catch (Exception e){
                movieButton.setText(movie.getTitle());
@@ -272,6 +300,13 @@ public class TicketSystem{
 
          movieSelectionPanel.add(movieButton);
       }
+      
+      JScrollPane scrollPane = new JScrollPane(movieSelectionPanel);
+      scrollPane.setBorder(BorderFactory.createLineBorder(Color.black));
+      scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+      scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+      scrollPane.getVerticalScrollBar().setUnitIncrement(15);
+      scrollPane.getViewport().setPreferredSize(new Dimension(600, 400));
 
       // Headers
       gbc.gridx = 0;
@@ -287,7 +322,7 @@ public class TicketSystem{
       
       gbc.gridx = 2;
       headerPanel.add(searchButton, gbc);
-
+      
       gbc.gridx = 3;
       gbc.weightx = 1;
       gbc.anchor = GridBagConstraints.EAST;
@@ -305,7 +340,6 @@ public class TicketSystem{
       // Center Text Display
       gbcTextDisplay.gridx = 0;
       gbcTextDisplay.gridy = 0;
-      gbcTextDisplay.gridheight = 1;
       gbcTextDisplay.anchor = GridBagConstraints.EAST;
       textDisplayPanel.add(titleText, gbcTextDisplay);
 
@@ -345,10 +379,10 @@ public class TicketSystem{
 
       homePanel.add(headerPanel, BorderLayout.NORTH);
       homePanel.add(centerHomePanel, BorderLayout.CENTER);
-      homePanel.add(movieSelectionPanel, BorderLayout.SOUTH);
+      homePanel.add(scrollPane, BorderLayout.SOUTH);
 
       mainViewPanel.add(homePanel, "homePanel");
-
+ 
       mainFrame.add(mainViewPanel);
       mainFrame.setVisible(true);
       
@@ -370,19 +404,29 @@ public class TicketSystem{
       JPanel bookingScreenPanel = new JPanel();
       bookingScreenPanel.setLayout(new BorderLayout(10, 10));
       bookingScreenPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-
+      
+      // DETAILS PANEL
       JPanel buyerPanel = new JPanel();
       buyerPanel.setLayout(new GridBagLayout());
       buyerPanel.setBorder(BorderFactory.createTitledBorder(etch, "Enter Details"));
       
+      Font detailFont = new Font("Arial", Font.BOLD, 15);
+      // Dimension screenSize = new Dimension(20, 20);
+
       JLabel nameLabel = new JLabel("Full Name: ");
+      nameLabel.setFont(detailFont);
       JTextField nameField = new JTextField(32);
-      
+      nameField.setBorder(BorderFactory.createLineBorder(Color.black));
+
       JLabel emailLabel = new JLabel("Email Address: ");
+      emailLabel.setFont(detailFont);
       JTextField emailField = new JTextField(32);
+      emailField.setBorder(BorderFactory.createLineBorder(Color.black));
       
       JLabel phoneLabel = new JLabel("Phone No: ");
+      phoneLabel.setFont(detailFont);
       JTextField phoneField = new JTextField(32);
+      phoneField.setBorder(BorderFactory.createLineBorder(Color.black));
       
       gbc.gridx = 0;
       gbc.gridy = 0;
@@ -406,14 +450,39 @@ public class TicketSystem{
       gbc.gridx = 1;
       buyerPanel.add(phoneField, gbc);
       
+      // TICKETS PANEL
       JPanel ticketPanel = new JPanel();
       ticketPanel.setLayout(new GridBagLayout());
       ticketPanel.setBorder(BorderFactory.createTitledBorder(etch, "Buy Ticket"));
       
+      // Ticket Image Panel
+      JPanel ticketImagePanel = new JPanel();
+      ticketImagePanel.setLayout(new GridBagLayout());
+
+      ticketImageDisplay = new JLabel();
+      // ImageIcon movieDisplayIcon = new ImageIcon("image/movie1.jpg");
+      // Image scaledDisplayImage = movieDisplayIcon.getImage().getScaledInstance(150, 200, Image.SCALE_SMOOTH);
+      // ticketImageDisplay.setIcon(new ImageIcon(scaledDisplayImage));
+      ticketImageDisplay.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+      // Ticket Text Panel
+      JPanel ticketTextPanel = new JPanel();
+      ticketTextPanel.setLayout(new GridBagLayout());
+      ticketTextPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 20));
+
+      Font ticketLabelFont = new Font("Arial", Font.BOLD,13);
+      Font ticketDisplayFont = new Font("Arial", Font.BOLD,13);
+
       JLabel titleLabel = new JLabel("Movie:");
+      titleLabel.setFont(ticketLabelFont);
+      movieTitleLabel.setFont(ticketDisplayFont);
+
       JLabel priceLabel = new JLabel("Price:");
+      priceLabel.setFont(ticketLabelFont);
+      moviePriceDisplay.setFont(ticketDisplayFont);
       
       JLabel ticketsLabel = new JLabel("Tickets:");
+      ticketsLabel.setFont(ticketLabelFont);
       
       ticketsField = new JTextField(15);
       ticketsField.setHorizontalAlignment(JTextField.CENTER);
@@ -433,41 +502,51 @@ public class TicketSystem{
       addButton.setFont(new Font("Arial", Font.PLAIN, 10));
       
       JLabel totalAmountLabel = new JLabel("Total Payment:");
+      totalAmountLabel.setFont(ticketLabelFont);
+      totalPayment.setFont(ticketDisplayFont);
       
       gbc.gridx = 0;
       gbc.gridy = 0;
-      ticketPanel.add(titleLabel, gbc);
+      ticketTextPanel.add(titleLabel, gbc);
       
       gbc.gridx = 1;
-      ticketPanel.add(movieTitleLabel, gbc);
+      ticketTextPanel.add(movieTitleLabel, gbc);
       
       gbc.gridx = 0;
       gbc.gridy = 1;
-      ticketPanel.add(priceLabel, gbc);
+      ticketTextPanel.add(priceLabel, gbc);
       
       gbc.gridx = 1;
-      ticketPanel.add(moviePriceLabel, gbc);
+      ticketTextPanel.add(moviePriceLabel, gbc);
       
       gbc.gridx = 0;
       gbc.gridy = 2;
-      ticketPanel.add(ticketsLabel, gbc);
+      ticketTextPanel.add(ticketsLabel, gbc);
       
       gbc.gridx = 1;
-      ticketPanel.add(ticketsField, gbc);
+      ticketTextPanel.add(ticketsField, gbc);
       
       gbc.gridx = 2;
-      ticketPanel.add(decButton, gbc);
+      ticketTextPanel.add(decButton, gbc);
       
       gbc.gridx = 3;
-      ticketPanel.add(addButton, gbc);
+      ticketTextPanel.add(addButton, gbc);
       
       gbc.gridx = 0;
       gbc.gridy = 3;
-      ticketPanel.add(totalAmountLabel, gbc);
+      ticketTextPanel.add(totalAmountLabel, gbc);
       
       gbc.gridx = 1;
-      ticketPanel.add(totalPayment, gbc);
+      ticketTextPanel.add(totalPayment, gbc);
       
+      gbc.gridx = 0;
+      gbc.gridy = 0;
+      gbc.gridheight = 3;
+      ticketImagePanel.add(ticketImageDisplay, gbc);
+
+      ticketPanel.add(ticketImagePanel);
+      ticketPanel.add(ticketTextPanel);
+
       JPanel buttonPanel = new JPanel();
       buttonPanel.setLayout(new BorderLayout());
       JButton nextButton = new JButton("Next");
@@ -495,79 +574,240 @@ public class TicketSystem{
       mainViewPanel.add(bookingPanel, "bookingPanel");
 
    }
+
+   public void seatSelectionUI(){
+
+      GridBagConstraints gbc = new GridBagConstraints();
+      gbc.insets = new Insets(5, 5, 5, 5);
+
+      seatSelectionPanel = new JPanel();
+      seatSelectionPanel.setBackground(Color.black);
+      seatSelectionPanel.setLayout(new BorderLayout()); 
+
+      Font headerFont = new Font("Fira Code", Font.PLAIN, 23);
+      Font headerDisplayFont = new Font("Fira Code", Font.BOLD, 23);
+
+      // HEADER CONTAINS - MOVIE NAME - TICKETS QUANTITY -
+      JPanel selectionHeader = new JPanel();
+      selectionHeader.setLayout(new GridBagLayout());
+      selectionHeader.setBackground(Color.black);
+      selectionHeader.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 25));
+      
+      // Movie Title Display
+      JLabel selectionMovieLabel = new JLabel("Movie:");
+      selectionMovieLabel.setFont(headerFont);
+      selectionMovieLabel.setForeground(Color.white);
+
+      selectionMovieDisplay = new JLabel("Movie 1");
+      selectionMovieDisplay.setFont(headerDisplayFont);
+      selectionMovieDisplay.setForeground(Color.white);
+
+      // Error Display 
+      selectionErrorLabel.setFont(headerDisplayFont);
+      selectionErrorLabel.setForeground(Color.red);
+
+      // Ticket Quantity Display
+      JLabel ticketQuantityLabel = new JLabel("Tickets:");
+      ticketQuantityLabel.setFont(headerFont);
+      ticketQuantityLabel.setForeground(Color.white);
+
+      ticketQuantity = new JLabel("0");
+      ticketQuantity.setFont(headerDisplayFont);
+      ticketQuantity.setForeground(Color.white);
+
+      // CENTER VIEW CONTAINS - SCREEN - SEAT NUMBERS
+      JPanel seatSelectionView = new JPanel();
+      seatSelectionView.setBackground(Color.black);
+      seatSelectionView.setLayout(new BorderLayout());
+      
+      // FOOTER CONTAINS BUTTONS - BACK - NEXT
+      JPanel selectionFooter = new JPanel();
+      selectionFooter.setBackground(Color.black);
+      selectionFooter.setLayout(new BorderLayout());
+      selectionFooter.setBorder(BorderFactory.createEmptyBorder(15, 20, 20, 20));
+
+      Dimension footerButtonDimension = new Dimension(120, 40);
+
+      JButton selectionBackButton = new JButton("Back");
+      selectionBackButton.setFocusPainted(false);
+      selectionBackButton.setPreferredSize(footerButtonDimension);
+      selectionBackButton.setBackground(Color.black);
+      selectionBackButton.setForeground(Color.white);
+      selectionBackButton.setActionCommand("back");
+      selectionBackButton.addActionListener(new seatSelectionListener());
+
+      JButton selectionNextButton = new JButton("Next");
+      selectionNextButton.setFocusPainted(false);
+      selectionNextButton.setPreferredSize(footerButtonDimension);
+      selectionNextButton.setBackground(Color.black);
+      selectionNextButton.setForeground(Color.white);
+      selectionNextButton.setActionCommand("next");
+      selectionNextButton.addActionListener(new seatSelectionListener());
+
+      gbc.gridx = 0;
+      gbc.gridy = 0;
+      gbc.weightx = 0;
+      gbc.anchor = GridBagConstraints.WEST;
+      selectionHeader.add(selectionMovieLabel, gbc);
+
+      gbc.gridx = 1;
+      gbc.gridy = 0;
+      gbc.anchor = GridBagConstraints.WEST;
+      selectionHeader.add(selectionMovieDisplay, gbc);
+
+      gbc.gridx = 1;
+      gbc.gridy = 0;
+      gbc.weightx = 1;
+      gbc.anchor = GridBagConstraints.CENTER;
+      selectionHeader.add(selectionErrorLabel, gbc);
+
+      gbc.gridx = 2;
+      gbc.gridy = 0;
+      gbc.weightx = 0;
+      gbc.anchor = GridBagConstraints.EAST;
+      selectionHeader.add(ticketQuantityLabel, gbc);
+
+      gbc.gridx = 3;
+      gbc.anchor = GridBagConstraints.EAST;
+      selectionHeader.add(ticketQuantity, gbc);
+
+      selectionFooter.add(selectionBackButton, BorderLayout.WEST);
+      selectionFooter.add(selectionNextButton, BorderLayout.EAST);
+      
+      seatSelectionPanel.add(selectionHeader, BorderLayout.NORTH);
+      seatSelectionPanel.add(seatSelectionView, BorderLayout.CENTER);
+      seatSelectionView.add(selectionFooter, BorderLayout.SOUTH);
+
+      mainViewPanel.add(seatSelectionPanel, "seatSelectionPanel");
+   }
    
-   // Listener for Movie Buttons
+   // Listener for Home Panel Buttons
    public class movieButtonListener implements ActionListener{
       public void actionPerformed(ActionEvent e){
          String command = e.getActionCommand();
-  
+         
          try{
-            if(command.equals("out")){
-               mainFrame.dispose();
-               initializeMovies();
-               loginUI();
-            }else if(command.equals("select")){
+            switch(command){
 
-               bookingUI();
+               case "out":
+                  mainFrame.dispose();
+                  initializeMovies();
+                  loginUI();
+                  break;
 
-               ticketsField.setText("0");
-               totalPayment.setText("0");
+               case "select":
+                  bookingUI();
 
-               movieTitleLabel.setText(movieTitleDisplay.getText());
-               moviePriceLabel.setText(moviePriceDisplay.getText());
+                  ticketsField.setText("0");
+                  totalPayment.setText("0");                 
 
-               cardLayout.show(mainViewPanel, "bookingPanel");
-               
-            }else{
+                  String title = movieTitleDisplay.getText();
 
-               int movieIndex = Integer.parseInt(command);
-               Movie selectedMovie = movies.get(movieIndex);
+                  for(int i = 0; i < movies.size(); i++){
+                     
+                     Movie movie = movies.get(i);
+                     if(title.equalsIgnoreCase(movie.getTitle())){
+                        ImageIcon movieDisplayIcon2 = new ImageIcon(movie.getImagePath());
+                        Image scaledDisplayImage2 = movieDisplayIcon2.getImage().getScaledInstance(170, 200, Image.SCALE_SMOOTH);
+                        ticketImageDisplay.setIcon(new ImageIcon(scaledDisplayImage2));
 
-               ImageIcon movieDisplayIcon = new ImageIcon(selectedMovie.getImagePath());
-               Image scaledDisplayImage = movieDisplayIcon.getImage().getScaledInstance(120, 150, Image.SCALE_SMOOTH);
-               movieImageDisplay.setIcon(new ImageIcon(scaledDisplayImage));
+                        movieTitleLabel.setText(movieTitleDisplay.getText());
+                        moviePriceLabel.setText(moviePriceDisplay.getText());
+                     }
+                  }
+                  
+                  cardLayout.show(mainViewPanel, "bookingPanel");
+                  break;
 
-               movieTitleDisplay.setText(selectedMovie.getTitle());
-               moviePriceDisplay.setText(String.valueOf(selectedMovie.getPrice()));
-               movieGenreDisplay.setText(selectedMovie.getGenre());
+               case "search":
+                  String searchedMovie = searchField.getText();
+
+                  for (int i = 0; i < movies.size(); i++) {
+
+                     Movie movie = movies.get(i);
+                     if (searchedMovie.equalsIgnoreCase(movie.getTitle())) {
+
+                        searchField.setBorder(BorderFactory.createLineBorder(Color.white));
+                        ImageIcon movieDisplayIcon = new ImageIcon(movie.getImagePath());
+                        Image scaledDisplayImage = movieDisplayIcon.getImage().getScaledInstance(170, 200, Image.SCALE_SMOOTH);
+                        movieImageDisplay.setIcon(new ImageIcon(scaledDisplayImage));
+
+                        movieTitleDisplay.setText(movie.getTitle());
+                        moviePriceDisplay.setText(String.valueOf(movie.getPrice()));
+                        movieGenreDisplay.setText(movie.getGenre());
+
+                     }
+                  }
+                  break;
+
+               default:
+                  Movie clickedMovie = movies.get(Integer.parseInt(command));
+
+                  ImageIcon movieDisplayIcon = new ImageIcon(clickedMovie.getImagePath());
+                  Image scaledDisplayImage = movieDisplayIcon.getImage().getScaledInstance(170, 200, Image.SCALE_SMOOTH);
+                  movieImageDisplay.setIcon(new ImageIcon(scaledDisplayImage));
+                  
+                  movieTitleDisplay.setText(clickedMovie.getTitle());
+                  moviePriceDisplay.setText(String.valueOf(clickedMovie.getPrice()));
+                  movieGenreDisplay.setText(clickedMovie.getGenre());
+
             }
          }catch(NumberFormatException ex){
-            System.err.println("Invalid command: " + command);
+               System.err.println("Invalid command: " + command);
+               return;
          }
+
       }
+
    }
   
-   // Listener for Booking Panel
+   // Listener for Booking Panel Buttons
    public class bookingButtonListener implements ActionListener{
    
       public void actionPerformed(ActionEvent e){
          
          String command = e.getActionCommand();
-         int numTickets = Integer.parseInt(ticketsField.getText());
-         int moviePrice = Integer.parseInt(moviePriceLabel.getText());
-         
-         switch(command){
-            
-            case "dec":
-               if(numTickets == 0){
-                  numTickets = 0;
-               }else{
-                  numTickets -= 1;   
-               }    
-               break;
+         int numTickets = 0;
+         int moviePrice = 0;
 
-            case "add":
-            numTickets += 1;
-               break;
+         try{
 
-            case "back":
-               cardLayout.show(mainViewPanel, "homePanel");
-               break;
+            numTickets = Integer.parseInt(ticketsField.getText());
+            moviePrice = Integer.parseInt(moviePriceLabel.getText());
+
+            switch(command){
                
-            case "next":
-               System.out.println("Next");
-               break;
+               case "dec":
+                  numTickets = Math.max(0, numTickets - 1);
+                  numTickets = Math.min(20, numTickets);  
+                  break;
 
+               case "add":
+                  ticketsField.setBorder(BorderFactory.createLineBorder(Color.gray));
+                  numTickets = Math.min(20, numTickets + 1);
+                  numTickets = Math.max(0, numTickets);
+                  break;
+
+               case "back":
+                  cardLayout.show(mainViewPanel, "homePanel");
+                  break;
+                  
+               case "next":
+                  
+                  if(Integer.parseInt(ticketsField.getText()) == 0){
+                     ticketsField.setBorder(BorderFactory.createLineBorder(Color.red));
+                  }else{
+                     seatSelectionUI();
+                     selectionMovieDisplay.setText(movieTitleDisplay.getText());
+                     ticketQuantity.setText(String.valueOf(numTickets));
+                     ticketsField.setBorder(BorderFactory.createLineBorder(Color.gray));
+                     cardLayout.show(mainViewPanel, "seatSelectionPanel");
+                  }
+                  break;
+
+            }
+         }catch(NumberFormatException nfe) {
+            numTickets = 0;
          }
          
          ticketsField.setText(String.valueOf(numTickets));
@@ -577,6 +817,31 @@ public class TicketSystem{
    
    }
    
+   // Listenere for Seat Selection Panel 
+   public class seatSelectionListener implements ActionListener{
+   
+      public void actionPerformed(ActionEvent e){
+
+         String command = e.getActionCommand();
+
+         switch(command){
+
+            case "back":
+
+               cardLayout.show(mainViewPanel, "bookingPanel");
+               break;
+
+            case "next":
+
+               System.out.println("Next");
+               break;
+
+         }
+
+      }
+
+   }
+
    // Listener for loginUI
    public class loginButtonListener implements ActionListener{
    
