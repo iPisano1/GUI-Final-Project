@@ -4,11 +4,11 @@
 // Day 3 - Added Search Function and Scroll Bar para sa movie catalog. Still trying na mag encapsulation para less hassle mag add og remove sa codes. 
 // Day 4 - Okay na ang SelectionUI and still working pa sa PaymentUI. Murag lisod na i encapsulate kay taas nakayng code. Ako nalang tiwason akong nasugdan pero tryan gihapon nako.
 
-import javax.swing.*;
-import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import javax.swing.*;
+import javax.swing.border.*;
 
 public class ticketSystem{
    
