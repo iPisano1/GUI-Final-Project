@@ -84,26 +84,26 @@ public class ticketSystem{
    // Initialize Movies 
    private void initializeMovies() {
       movies = new ArrayList<>();
-      movies.add(new Movie("Inside Out", 450, "image/movie1.jpg", "Children's Film"));
-      movies.add(new Movie("Frozen", 320, "image/movie2.jpg", "Children's Film"));
-      movies.add(new Movie("How to Train Your Dragon", 250, "image/movie3.jpg", "Children's Film"));
-      movies.add(new Movie("Minions", 350, "image/movie4.jpg", "Children's Film"));
-      movies.add(new Movie("Kung Fu Panda", 280, "image/movie5.jpg", "Children's Film"));
-      movies.add(new Movie("Spider Man", 250, "image/movie6.jpg", "Superhero"));
-      movies.add(new Movie("Hulk", 180, "image/movie7.jpg", "Superhero"));
-      movies.add(new Movie("Aquaman", 320, "image/movie8.jpg", "Superhero"));
-      movies.add(new Movie("Wonder Woman", 290, "image/movie9.jpg", "Superhero"));
-      movies.add(new Movie("Man Of Steel", 230, "image/movie10.jpg", "Superhero"));
-      movies.add(new Movie("Top Gun Maverick" , 280,"image/movie11.jpg", "Action"));
-      movies.add(new Movie("John Wick", 380, "image/movie12.jpg", "Action"));
-      movies.add(new Movie("Fast and Furious", 230, "image/movie13.jpg", "Action"));
-      movies.add(new Movie("Baby Driver", 250, "image/movie14.jpg", "Action"));
-      movies.add(new Movie("Extraction", 320, "image/movie15.jpg", "Action"));
-      movies.add(new Movie("The Conjuring", 280, "image/movie16.jpg", "Horror"));
-      movies.add(new Movie("Ready Or Not", 320, "image/movie17.jpg", "Horror"));
-      movies.add(new Movie("Annabelle", 320, "image/movie18.jpg", "Horror"));
-      movies.add(new Movie("UnFriended", 220, "image/movie19.jpg", "Horror"));
-      movies.add(new Movie("The Ring", 280, "image/movie20.jpg", "Horror"));
+      movies.add(new Movie(1 ,"Inside Out", 450, "image/movie1.jpg", "Children's Film"));
+      movies.add(new Movie(2 ,"Frozen", 320, "image/movie2.jpg", "Children's Film"));
+      movies.add(new Movie(3 ,"How to Train Your Dragon", 250, "image/movie3.jpg", "Children's Film"));
+      movies.add(new Movie(4 ,"Minions", 350, "image/movie4.jpg", "Children's Film"));
+      movies.add(new Movie(5 ,"Kung Fu Panda", 280, "image/movie5.jpg", "Children's Film"));
+      movies.add(new Movie(6 ,"Spider Man", 250, "image/movie6.jpg", "Superhero"));
+      movies.add(new Movie(7 ,"Hulk", 180, "image/movie7.jpg", "Superhero"));
+      movies.add(new Movie(8 ,"Aquaman", 320, "image/movie8.jpg", "Superhero"));
+      movies.add(new Movie(9 ,"Wonder Woman", 290, "image/movie9.jpg", "Superhero"));
+      movies.add(new Movie(10 ,"Man Of Steel", 230, "image/movie10.jpg", "Superhero"));
+      movies.add(new Movie(11 ,"Top Gun Maverick" , 280,"image/movie11.jpg", "Action"));
+      movies.add(new Movie(12 ,"John Wick", 380, "image/movie12.jpg", "Action"));
+      movies.add(new Movie(13 ,"Fast and Furious", 230, "image/movie13.jpg", "Action"));
+      movies.add(new Movie(14 ,"Baby Driver", 250, "image/movie14.jpg", "Action"));
+      movies.add(new Movie(15 ,"Extraction", 320, "image/movie15.jpg", "Action"));
+      movies.add(new Movie(16 ,"The Conjuring", 280, "image/movie16.jpg", "Horror"));
+      movies.add(new Movie(17 ,"Ready Or Not", 320, "image/movie17.jpg", "Horror"));
+      movies.add(new Movie(18 ,"Annabelle", 320, "image/movie18.jpg", "Horror"));
+      movies.add(new Movie(19 ,"UnFriended", 220, "image/movie19.jpg", "Horror"));
+      movies.add(new Movie(20 ,"The Ring", 280, "image/movie20.jpg", "Horror"));
    }
 
    // Constructor
@@ -243,7 +243,7 @@ public class ticketSystem{
       searchButton.setForeground(Color.white);
       searchButton.setActionCommand("search");
       searchButton.addActionListener(new movieButtonListener());
-      mainFrame.getRootPane() .setDefaultButton(searchButton);
+      mainFrame.getRootPane().setDefaultButton(searchButton);
       
       // Center Panel
       JPanel centerHomePanel = new JPanel();
@@ -448,7 +448,7 @@ public class ticketSystem{
       buyerPanel.setLayout(new GridBagLayout());
       Border etch = BorderFactory.createEtchedBorder(Color.black, Color.gray);
       TitledBorder  titledBorder = BorderFactory.createTitledBorder(etch, "Enter Details");
-      titledBorder.setTitleColor(Color.white);;
+      titledBorder.setTitleColor(Color.white);
       buyerPanel.setBorder(BorderFactory.createCompoundBorder(
          titledBorder,
          BorderFactory.createEmptyBorder(20, 20, 20, 20)
@@ -521,7 +521,7 @@ public class ticketSystem{
       ticketPanel.setLayout(new GridBagLayout());
       Border ticketEtch = BorderFactory.createEtchedBorder(Color.black, Color.gray);
       TitledBorder  ticketTitledBorder = BorderFactory.createTitledBorder(ticketEtch, "Buy Ticket");
-      ticketTitledBorder.setTitleColor(Color.white);;
+      ticketTitledBorder.setTitleColor(Color.white);
       ticketPanel.setBorder(BorderFactory.createCompoundBorder(
          ticketTitledBorder,
          BorderFactory.createEmptyBorder(20, 20, 20, 20)
@@ -689,6 +689,7 @@ public class ticketSystem{
 
    }
 
+   // Seat Selection UI
    public void seatSelectionUI(){
 
       seatSelectionPanel = new JPanel();
@@ -752,22 +753,21 @@ public class ticketSystem{
       seatSelectionView.add(screenDisplayLabel, gbcDisplay);
 
       // Seat Selection Buttons
-      for(int i = 0; i < 20; i++){
+      for(int i = 1; i <= 20; i++){
 
-         seatButton = new JButton(String.valueOf(i+1));
+         seatButton = new JButton(String.valueOf(i));
          seatButton.setFocusPainted(false);
          seatButton.addActionListener(new seatSelectionListener());
-         seatButton.setActionCommand("Seat"+(i+1));
+         seatButton.setActionCommand(String.valueOf(i));
          seatButton.setBackground(Color.black);
          seatButton.setForeground(Color.white);
          seatButton.setFont(selectionFont);
          seatButton.setPreferredSize(new Dimension(120, 70));
 
-         gbcDisplay.gridx = i % 5;
-         gbcDisplay.gridy = 1 + (i / 5);
+         gbcDisplay.gridx = (i - 1) % 5;
+         gbcDisplay.gridy = 1 + ((i - 1) / 5);
          gbcDisplay.gridwidth = 1;
          seatSelectionView.add(seatButton, gbcDisplay);
-
       }
       
       // FOOTER CONTAINS BUTTONS - BACK - NEXT
@@ -860,15 +860,15 @@ public class ticketSystem{
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.insets = new Insets(5, 5, 5, 5);
 
-      JPanel paymentPanel = new JPanel(paymentCardLayout);
+      JPanel paymentPanel = new JPanel();
       paymentPanel.setBackground(Color.black);
       paymentPanel.setLayout(new GridBagLayout());
 
       JPanel paymentScreenPanel = new JPanel();
-      paymentScreenPanel.setBackground(Color.black);
+      paymentScreenPanel.setBackground(Color.gray);
       paymentScreenPanel.setLayout(new GridBagLayout());
       
-      paymentMethodPanel = new JPanel();
+      paymentMethodPanel = new JPanel();;
       paymentMethodPanel.setBorder(BorderFactory.createCompoundBorder(
          BorderFactory.createLineBorder(Color.gray),
          BorderFactory.createEmptyBorder(20, 20, 20, 20)   
@@ -899,7 +899,7 @@ public class ticketSystem{
       Font methodFont = new Font("Fira Code", Font.BOLD, 20);
 
       JButton paymentCardButton = new JButton("CARD");
-      paymentCardButton.setBorder(BorderFactory.createLineBorder(Color.blue));
+      paymentCardButton.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.blue));
       paymentCardButton.setFocusPainted(false);
       paymentCardButton.setFont(methodFont);
       paymentCardButton.setPreferredSize(paymentButtonDimension);
@@ -907,7 +907,7 @@ public class ticketSystem{
       paymentCardButton.addActionListener(new paymentListener());
       
       JButton paymentCashButton = new JButton("CASH");
-      paymentCashButton.setBorder(BorderFactory.createLineBorder(Color.green));
+      paymentCashButton.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.green));
       paymentCashButton.setFocusPainted(false);
       paymentCashButton.setFont(methodFont);
       paymentCashButton.setPreferredSize(paymentButtonDimension);
@@ -958,11 +958,10 @@ public class ticketSystem{
       paymentMethodPanel_CENTER.add(paymentCashButton);
 
       // FOOTER LAYOUT
-
       gbc.gridx = 0;
       gbc.gridy = 0;
       gbc.anchor = GridBagConstraints.WEST;
-      paymentMethodPanel_FOOTER.add(paymentBackButton);
+      paymentMethodPanel_FOOTER.add(paymentBackButton, gbc);
       
       paymentMethodPanel.add(paymentMethodPanel_HEADER, BorderLayout.NORTH);
       paymentMethodPanel.add(paymentMethodPanel_CENTER, BorderLayout.CENTER);
@@ -1006,7 +1005,7 @@ public class ticketSystem{
       // END OF CASH METHOD
       
       // PAYMENT CONFIRMATION UI
-
+      
       Font confirmFont = new Font("Fira Code", Font.BOLD, 23);
 
       paymenConfirmationPanel = new JPanel();
@@ -1149,7 +1148,7 @@ public class ticketSystem{
 
                   for(int i = 0; i < movies.size(); i++){
                      Movie movie = movies.get(i);
-                     if(title.equalsIgnoreCase(movie.getTitle())){
+                     if(title.equals(movie.getTitle())){
                         ImageIcon movieDisplayIcon2 = new ImageIcon(movie.getImagePath());
                         Image scaledDisplayImage2 = movieDisplayIcon2.getImage().getScaledInstance(170, 200, Image.SCALE_SMOOTH);
                         ticketImageDisplay.setBorder(BorderFactory.createCompoundBorder(
@@ -1168,12 +1167,16 @@ public class ticketSystem{
 
                case "search":
                   String searchedMovie = searchField.getText();
+                  searchField.setBorder(BorderFactory.createCompoundBorder(
+                     BorderFactory.createLineBorder(Color.gray),
+                     BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                  ));
 
-                  for (int i = 0; i < movies.size(); i++) {
-
+                  boolean movieFound = false;
+                  for(int i = 0; i < movies.size(); i++){
                      Movie movie = movies.get(i);
-                     if (searchedMovie.equalsIgnoreCase(movie.getTitle())) {
-
+                     if(searchedMovie.equalsIgnoreCase(movie.getTitle())){
+                        movieFound = true;
                         ImageIcon movieDisplayIcon = new ImageIcon(movie.getImagePath());
                         Image scaledDisplayImage = movieDisplayIcon.getImage().getScaledInstance(170, 200, Image.SCALE_SMOOTH);
                         movieImageDisplay.setIcon(new ImageIcon(scaledDisplayImage));
@@ -1183,6 +1186,12 @@ public class ticketSystem{
                         movieGenreDisplay.setText(movie.getGenre());
 
                      }
+                  }
+                  if(!movieFound){
+                     searchField.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.red),
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                  ));
                   }
                   break;
 
@@ -1196,11 +1205,9 @@ public class ticketSystem{
                   movieTitleDisplay.setText(clickedMovie.getTitle());
                   moviePriceDisplay.setText(String.valueOf(clickedMovie.getPrice()));
                   movieGenreDisplay.setText(clickedMovie.getGenre());
-
             }
          }catch(NumberFormatException ex){
                System.err.println("Invalid command: " + command);
-               return;
          }
 
       }
@@ -1284,7 +1291,7 @@ public class ticketSystem{
    
    }
    
-   // Listenere for Seat Selection Panel 
+   // Listener for Seat Selection Panel 
    public class seatSelectionListener implements ActionListener{
    
       public void actionPerformed(ActionEvent e){
@@ -1310,7 +1317,6 @@ public class ticketSystem{
                   paymentUI();
                   selectionErrorLabel.setForeground(Color.red);
                   selectionErrorLabel.setText("");
-                  System.out.println("Selected Seats: " + String.join(", ", selectedSeats));
                   paymentTotalAmountDisplay.setText(String.valueOf(totalAmountToPay));
                   cardLayout.show(mainViewPanel, "paymentPanel");  
                }
@@ -1347,6 +1353,7 @@ public class ticketSystem{
 
    }
 
+   // Listener for Payment UI
    public class paymentListener implements ActionListener{
 
       public void actionPerformed(ActionEvent e){
@@ -1451,6 +1458,10 @@ public class ticketSystem{
                   cashAmount = Integer.parseInt(cashAmountField.getText());
                   
                   if(cashAmount >= totalAmountToPay){
+                     cashAmountField.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.black),
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                     ));
                      paymentMethodPanel.remove(paymentMethodPanel_HEADER);
                      paymentMethodPanel.remove(paymentCashMethodPanel);
                      
@@ -1475,12 +1486,19 @@ public class ticketSystem{
                      confirmSeatsDisplay.setText(String.join(", ", selectedSeats));
                   }else{
                      cashAmountField.setText("");
-                     System.out.println("Bulok way kwarta");
+                     cashAmountField.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.red),
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                     ));
                   }
 
                }catch(NumberFormatException ex){
                   cashAmount = 0;
                   cashAmountField.setText("");
+                  cashAmountField.setBorder(BorderFactory.createCompoundBorder(
+                     BorderFactory.createLineBorder(Color.red),
+                     BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                  ));
                }
                break;
             case "confirm":
@@ -1502,11 +1520,11 @@ public class ticketSystem{
          
          if(user.equals(ADMIN_USERNAME) && pass.equals(ADMIN_PASSWORD)){
             loginFrame.setVisible(false);
-            loginFrame.dispose();
+            loginFrame.dispose(); // Close Login UI/Frame
             initializeMovies();
             mainUI();
          }else{
-            errorLabel.setText("Invalid username or password");
+            errorLabel.setText("Invalid username or password");   
             errorLabel.setVisible(true);
             userField.setText("");
             passField.setText("");
